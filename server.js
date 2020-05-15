@@ -22,7 +22,7 @@ app.use(validateToken);
 	rating: number
  */
 
-app.get('/api/bookmarks', validateToken, (req, res) => {
+app.get('/bookmarks', validateToken, (req, res) => {
 	console.log('%c getting list of bookmarks', 'background: #332167; color: #B3D1F6; font-size: 16px');
 	Bookmarks.getAllBookmarks()
 		.then(allBookmarks => { return res.status(200).json(allBookmarks); })
@@ -33,7 +33,7 @@ app.get('/api/bookmarks', validateToken, (req, res) => {
 });
 
 
-app.get('/api/bookmark', validateToken, (req, res) => {
+app.get('/bookmark', validateToken, (req, res) => {
 	console.log('Getting boomark by title');
 	console.log(req.query.title);
 	let queryTitle = req.query.title;
@@ -55,7 +55,7 @@ app.get('/api/bookmark', validateToken, (req, res) => {
 		})
 });
 
-app.post('/api/bookmarks', [jsonParser, validateToken], (req, res) => {
+app.post('/bookmarks', [jsonParser, validateToken], (req, res) => {
 	console.log('Adding a bookmark');
 	console.log('body', req.body);
 	const { title, description, url, rating } = req.body;
@@ -88,7 +88,7 @@ app.post('/api/bookmarks', [jsonParser, validateToken], (req, res) => {
 		})
 });
 
-app.patch('/api/bookmark/:id', [jsonParser, validatePatch, validateToken], (req, res) => {
+app.patch('/bookmark/:id', [jsonParser, validatePatch, validateToken], (req, res) => {
 	let id = req.params.id;
 	const { rating } = req.body;
 
@@ -114,7 +114,7 @@ app.patch('/api/bookmark/:id', [jsonParser, validatePatch, validateToken], (req,
 		})
 })
 
-app.delete('/api/bookmark/:id', validateToken, (req, res) => {
+app.delete('/bookmark/:id', validateToken, (req, res) => {
 	let id = req.params.id;
 	console.log(id)
 	if (!id) {
