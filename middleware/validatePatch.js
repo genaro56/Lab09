@@ -1,5 +1,6 @@
 const validatePatch = (req, res, next) => {
     let id = req.params.id;
+    console.log("patch Body", req.body)
     let bodyId = req.body.id;
     if (!bodyId) {
         res.statusMessage = "The id must be sent in the body"
