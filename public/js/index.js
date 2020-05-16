@@ -1,94 +1,245 @@
-const API_TOKEN = 'password12345';
+const API_TOKEN = '2abbf7c3-245b-404f-9473-ade729ed4653';
 
-function addStudentFech( name, id ){
-    let url = '/api/createStudent';
+function addBookMarkFetch(data) {
+    let url = '/bookmarks';
 
-    let data = {
-        name : name,
-        id : Number(id)
+    let postData = {
+        title: data.title,
+        url: data.url,
+        description: data.description,
+        rating: Number(data.rating),
     }
 
     let settings = {
-        method : 'POST',
-        headers : {
-            Authorization : `Bearer ${API_TOKEN}`,
-            'Content-Type' : 'application/json'
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+            'Content-Type': 'application/json'
         },
-        body : JSON.stringify( data )
+        body: JSON.stringify(postData)
     }
 
-    let results = document.querySelector( '.results' );
+    let results = document.querySelector('.results');
 
-    fetch( url, settings )
-        .then( response => {
-            if( response.ok ){
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
                 return response.json();
             }
-            throw new Error( response.statusText );
+            throw new Error(response.statusText);
         })
-        .then( responseJSON => {
-            fetchStudents();
+        .then(res => {
+            fetchBookmarks();
         })
-        .catch( err => {
+        .catch(err => {
+            results.innerHTML = `<div> ${err.message} </div>`;
+        });
+}
+function deleteBookmarkFetch(id) {
+    let url = '/bookmark/' + id;
+    console.log("id", id)
+    console.log('%c url', 'background: #332167; color: #B3D1F6; font-size: 16px', url)
+    let settings = {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+    }
+
+    let results = document.querySelector('.results');
+
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            throw new Error(response.statusText);
+        })
+        .then(res => {
+            fetchBookmarks();
+        })
+        .catch(err => {
             results.innerHTML = `<div> ${err.message} </div>`;
         });
 }
 
-function fetchStudents(){
-
-    let url = '/api/students';
+function updateBookmarkFetch(id, title, bookmarkUrl, description, rating) {
+    const data = Object.assign({},
+        id && { id: id },
+        title && { title },
+        bookmarkUrl && { url: bookmarkUrl },
+        description && { description },
+        rating && { rating: Number(rating) }
+    )
+    console.log("Data", data)
+    let url = '/bookmark/' + id;
     let settings = {
-        method : 'GET',
-        headers : {
-            Authorization : `Bearer ${API_TOKEN}`
+        method: 'PATCH',
+        headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+    
+    let results = document.querySelector('.results');
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(res => {
+            fetchBookmarks();
+        })
+        .catch(err => {
+            results.innerHTML = `<div> ${err.message} </div>`;
+        });
+}
+
+function getBookMarkFetch(title) {
+    let url = `/bookmark?title=${title}`;
+    let settings = {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${API_TOKEN}`
         }
     }
-    let results = document.querySelector( '.results' );
+    let results = document.querySelector('.results');
 
-    fetch( url, settings )
-        .then( response => {
-            if( response.ok ){
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
                 return response.json();
             }
-            throw new Error( response.statusText );
+            throw new Error(response.statusText);
         })
-        .then( responseJSON => {
+        .then(res => {
             results.innerHTML = "";
-            for ( let i = 0; i < responseJSON.length; i ++ ){
-                results.innerHTML += `<div> ${responseJSON[i].name} </div>`;
+            console.log(res)
+            for (let i = 0; i < res.length; i++) {
+                results.innerHTML += `
+                    <div> 
+                        <h3>${res[i].title} </h3>
+                        <ul>
+                            <li>id: ${res[i].id}</li>
+                            <li>url: ${res[i].url}</li>
+                            <li>description: ${res[i].description}</li>
+                            <li>rating: ${res[i].rating}</li>
+                        </ul>
+                    </div>
+                    `;
             }
         })
-        .catch( err => {
+        .catch(err => {
             results.innerHTML = `<div> ${err.message} </div>`;
         });
-    
 }
 
-function watchStudentsForm(){
-    let studentsForm = document.querySelector( '.students-form' );
+function fetchBookmarks() {
 
-    studentsForm.addEventListener( 'submit', ( event ) => {
+    let url = '/bookmarks';
+    let settings = {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${API_TOKEN}`
+        }
+    }
+    let results = document.querySelector('.results');
+
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(res => {
+            results.innerHTML = "";
+            console.log(res)
+            for (let i = 0; i < res.length; i++) {
+                results.innerHTML += `
+                    <div> 
+                        <h3>${res[i].title} </h3>
+                        <ul>
+                            <li>id: ${res[i].id}</li>
+                            <li>url: ${res[i].url}</li>
+                            <li>description: ${res[i].description}</li>
+                            <li>rating: ${res[i].rating}</li>
+                        </ul>
+                    </div>
+                    `;
+            }
+        })
+        .catch(err => {
+            results.innerHTML = `<div> ${err.message} </div>`;
+        });
+
+}
+
+function watchBookmarksForm() {
+    let bookmarksForm = document.querySelector('.bookmarks-form');
+
+    bookmarksForm.addEventListener('submit', (event) => {
         event.preventDefault();
+        fetchBookmarks();
+    });
+}
+function watchDeleteBookmarksForm() {
+    let bookmarksForm = document.querySelector('.delete-bookmarks-form');
 
-        fetchStudents();
+    bookmarksForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let id = document.getElementById('bookmarkId').value;
+        deleteBookmarkFetch(id);
+    });
+}
+function watchUpdateBookmarksForm() {
+    let bookmarksForm = document.querySelector('.update-bookmarks-form');;
+
+    bookmarksForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let id = document.getElementById('updateBookmarkId').value;
+        let title = document.getElementById('updateBookmarkTitle').value;
+        let url = document.getElementById('updateBookmarkURL').value;
+        let rating = document.getElementById('updateBookmarkRating').value;
+        let description = document.getElementById('updateBookmarkDescription').value;
+
+        updateBookmarkFetch(id, title, url, description, rating);
     });
 }
 
-function watchAddStudentForm(){
-    let studentsForm = document.querySelector( '.add-student-form' );
+function watchAddBookmarksForm() {
+    let bookmarksForm = document.querySelector('.add-bookmarks-form');
 
-    studentsForm.addEventListener( 'submit' , ( event ) => {
+    bookmarksForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        let name = document.getElementById( 'studentName' ).value;
-        let id = document.getElementById( 'studentID' ).value;
+        let title = document.getElementById('bookmarkTitle').value;
+        let url = document.getElementById('bookmarkURL').value;
+        let rating = document.getElementById('bookmarkRating').value;
+        let description = document.getElementById('bookmarkDescription').value;
 
-        addStudentFech( name, id );
+        addBookMarkFetch({ title, url, description, rating });
+    })
+}
+function watchGetBookmarkForm() {
+    let bookmarksForm = document.querySelector('.get-bookmark-form');
+
+    bookmarksForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let title = document.getElementById('getBookmarkTitle').value;
+        getBookMarkFetch(title);
     })
 }
 
-function init(){
-    watchStudentsForm();
-    watchAddStudentForm();
+function init() {
+    watchBookmarksForm();
+    watchAddBookmarksForm();
+    watchDeleteBookmarksForm();
+    watchUpdateBookmarksForm();
+    watchGetBookmarkForm();
 }
 
 init();

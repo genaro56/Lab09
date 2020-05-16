@@ -12,11 +12,12 @@
     <title>Lab09</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
-    <form class="students-form">
+    <form class="bookmarks-form">
+        <h1>GET</h1>
         <label>
             Click the buttton to get the full list of bookmarks
         </label>
@@ -24,17 +25,80 @@
             Get bookmarks
         </button>
     </form>
-    <form class="add-student-form">
-        <label for="studentName">
-            Author:
+    <form class="add-bookmarks-form">
+        <h1>POST</h1>
+        <label for="Title">
+            Title:
         </label>
-        <input type="text" id="studentName" />
-        <label for="studentID">
-            ID:
+        <input type="text" id="bookmarkTitle" />
+        <label for="bookmarkURL">
+            url:
         </label>
-        <input type="number" id="studentID" />
+        <input type="text" id="bookmarkURL" />
+        <label for="bookmarkDescription">
+            description:
+        </label>
+        <input type="text" id="bookmarkDescription" />
+        <label for="bookmarkRating">
+            rating:
+        </label>
+        <input type="number" id="bookmarkRating" />
         <button type="submit">
-            Add student
+            Add bookmark
+        </button>
+    </form>
+    <form class="delete-bookmarks-form">
+        <h1>DELETE</h1>
+        <label for="bookmarkId">
+            id:
+        </label>
+        <input type="text" id="bookmarkId" />
+        <button type="submit">
+            Delete Bookmark
+        </button>
+    </form>
+    <form class="update-bookmarks-form">
+        <h1>UPDATE</h1>
+        <div class="update-info">
+            <div>
+                <label for="updateBookmarkId">
+                    id:
+                </label>
+                <input style="width: 100%;" type="text" id="updateBookmarkId" />
+            </div>
+            <div class="col1">
+                <label for="Title">
+                    Title:
+                </label>
+                <input type="text" id="updateBookmarkTitle" />
+                <label for="updateBookmarkURL">
+                    url:
+                </label>
+                <input type="text" id="updateBookmarkURL" />
+            </div>
+            <div class="col2">
+                <label for="updateBookmarkDescription">
+                    description:
+                </label>
+                <input type="text" id="updateBookmarkDescription" />
+                <label for="updateBookmarkRating">
+                    rating:
+                </label>
+                <input type="number" id="updateBookmarkRating" />
+            </div>
+        </div>
+        <button type="submit">
+            Update Bookmark
+        </button>
+    </form>
+    <form class="get-bookmark-form">
+        <h1>GET by Title</h1>
+        <label for="Title">
+            Title:
+        </label>
+        <input type="text" id="getBookmarkTitle" />
+        <button id="submit-btn" type="submit">
+            Get bookmark
         </button>
     </form>
     <section class="results">
