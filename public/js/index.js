@@ -1,5 +1,8 @@
 const API_TOKEN = '2abbf7c3-245b-404f-9473-ade729ed4653';
-
+const headersConfig = {
+    Authorization: `Bearer ${API_TOKEN}`,
+    'Content-Type': 'application/json'
+}
 function addBookMarkFetch(data) {
     let url = '/bookmarks';
 
@@ -12,10 +15,7 @@ function addBookMarkFetch(data) {
 
     let settings = {
         method: 'POST',
-        headers: {
-            Authorization: `Bearer ${API_TOKEN}`,
-            'Content-Type': 'application/json'
-        },
+        headers: headersConfig,
         body: JSON.stringify(postData)
     }
 
@@ -38,13 +38,9 @@ function addBookMarkFetch(data) {
 function deleteBookmarkFetch(id) {
     let url = '/bookmark/' + id;
     console.log("id", id)
-    console.log('%c url', 'background: #332167; color: #B3D1F6; font-size: 16px', url)
     let settings = {
         method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${API_TOKEN}`,
-            'Content-Type': 'application/json'
-        },
+        headers: headersConfig,
     }
 
     let results = document.querySelector('.results');
@@ -76,10 +72,7 @@ function updateBookmarkFetch(id, title, bookmarkUrl, description, rating) {
     let url = '/bookmark/' + id;
     let settings = {
         method: 'PATCH',
-        headers: {
-            Authorization: `Bearer ${API_TOKEN}`,
-            'Content-Type': 'application/json'
-        },
+        headers: headersConfig,
         body: JSON.stringify(data)
     }
     
@@ -103,9 +96,7 @@ function getBookMarkFetch(title) {
     let url = `/bookmark?title=${title}`;
     let settings = {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${API_TOKEN}`
-        }
+        headers: headersConfig,
     }
     let results = document.querySelector('.results');
 
@@ -143,9 +134,7 @@ function fetchBookmarks() {
     let url = '/bookmarks';
     let settings = {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${API_TOKEN}`
-        }
+        headers: headersConfig,
     }
     let results = document.querySelector('.results');
 
