@@ -5,12 +5,17 @@ const morgan = require('morgan');
 const uuid = require('uuid');
 const jsonParser = bodyParser.json();
 const mongoose = require('mongoose');
+
 const { Bookmarks } = require("./models/bookmarksModel");
+const {DATABASE_URL, PORT} = require( './config' );
+
 /* middleware */
 const validateToken = require('./middleware/validateToken');
 const validatePatch = require('./middleware/validatePatch');
+const cors = require( './middleware/cors' );
 
-
+app.use(cors);
+app.use(express.static('public'));
 app.use(morgan('dev'));
 app.use(validateToken);
 
@@ -31,7 +36,6 @@ app.get('/bookmarks', validateToken, (req, res) => {
 			return res.status(500).end();
 		});
 });
-
 
 app.get('/bookmark', validateToken, (req, res) => {
 	console.log('Getting boomark by title');
@@ -103,8 +107,11 @@ app.patch('/bookmark/:id', [jsonParser, validatePatch, validateToken], (req, res
 	Bookmarks.updateBookmark(id, req.body)
 		.then(result => {
 			console.log("Results:", result);
-			if (result.nModified < 1) {
-				res.statusMessage = "The requested bookmark does not exist in the database.";
+			if (result.nModified == 0 && result.n === 1) {
+				res.statusMessage = "The values are the same.";
+				return res.status(406).end();
+			} else if (result.nModified == 0 && result.n === 0) {
+				res.statusMessage = "The bookmark does not exist in the database.";
 				return res.status(406).end();
 			}
 			return res.status(202).json(result);
@@ -142,7 +149,7 @@ app.delete('/bookmark/:id', validateToken, (req, res) => {
 		});
 })
 
-app.listen(8080, () => {
+app.listen(PORT, () => {
 	console.log('this server is running in port 8080.');
 	new Promise((resolve, reject) => {
 		const settings = {
@@ -151,7 +158,7 @@ app.listen(8080, () => {
 			useCreateIndex: true
 		}
 		mongoose.connect(
-			'mongodb://localhost/bookmarksdb',
+			DATABASE_URL,
 			settings,
 			(err) => {
 				if (err) {
